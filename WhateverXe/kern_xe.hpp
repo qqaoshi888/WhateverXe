@@ -539,6 +539,23 @@ private:
  static uint32_t wrapTGLPanelTiming(void *controller);
 	static uint32_t tglPanelDepthPort(void *port);
 	static void wrapTGLModeTiming(void *controller,void *fb,void *timing);
+	// AI 修改: internal eDP training fix, enabled by -wex-edp-fix-training.
+	// The LightUpEDP hook runs the donor's PPS off/T12/on sink reset and the
+	// DDI/PG power-domain repair before the native internal light-up.
+	bool tglPanelLightUpReady {};
+	mach_vm_address_t orgTGLPanelLightUp {};
+	mach_vm_address_t tglPanelPowerFunction {};
+	bool tglPanelPowerFunctionReady {},tglColdPanelCycleDone {};
+	bool tglEDPTrainingFixReady {};
+	static uint32_t wrapTGLPanelLightUp(void *controller,void *fb,void *path,const void *timing);
+	// DDI/PG power-domain repair, part of the same opt-in switch.
+	bool tglEDPPowerDomainReady {};
+	uint32_t tglPowerRepairBusy {};
+	mach_vm_address_t tglPowerWellEnableAux {},tglPowerWellDisableAux {};
+	mach_vm_address_t tglPowerWellEnableDDI {},tglPowerWellDisableDDI {};
+	mach_vm_address_t tglPowerWellEnableEngine {};
+	static uint32_t tglPanelAuxDDI(void *port);
+	static void tglPowerDomainRepair(void *controller,uint32_t ddi);
 	mach_vm_address_t orgTGLGamma10 {}, orgTGLRegisterWrite {}, orgTGLFastRegisterWrite {};
 	static void wrapTGLGamma10(void *path, void *transaction, uint32_t control);
 	static void wrapTGLRegisterWrite(void *access, unsigned long reg, uint32_t value);
