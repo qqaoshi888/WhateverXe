@@ -1,4 +1,7 @@
 {
+  "-wex-tgl-va-fallback": [],
+  "-wex-tgl-va-probe": [],
+  "-wex-tgl-va-sites": [],
   "-wex-edp-fix-training": [],
   "-wex-dsi-audit": [],
   "-wex-dsi-60hz": [],

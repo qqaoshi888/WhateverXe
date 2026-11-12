@@ -8,6 +8,7 @@
 #include "kern_xelp_device.hpp"
 #include "kern_xe_data_access.hpp"
 #include "kern_backlight_profile.hpp"
+#include "kern_tgl_va_fallback.hpp"
 #include <Headers/kern_api.hpp>
 #include <Headers/kern_iokit.hpp>
 #include <IOKit/pci/IOPCIDevice.h>
@@ -56,6 +57,10 @@ void XeHost::processKernel(KernelPatcher &patcher) {
  // The host must dispatch framebuffer patches and accelerator rejection
  // hooks even when the selected profile deliberately has no Render backend.
  active=profile.displayAdmitted();
+ // AI 修改: opt-in Tiger Lake VA post-processing fallback. Install the exact
+ // VA page filter before any userspace process maps the VA driver.
+ TGLVAFallback::prepare(patcher,gpu,profile,
+  checkKernelArgument("-wex-tgl-va-fallback"));
 
  const auto display=XELP::displayAdapter(profile.family);
  systemWakeRecovery=active && (display==XELP::DisplayAdapter::ADLP || display==XELP::DisplayAdapter::ADLN);

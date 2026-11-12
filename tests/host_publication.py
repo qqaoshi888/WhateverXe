@@ -77,6 +77,8 @@ struct {
  template<class F>void onKextLoadForce(void*,unsigned,F,void*){}
  void onKextLoadForce(KernelPatcher::KextInfo*){}
 } lilu;
+inline bool checkKernelArgument(const char*){return false;}
+namespace TGLVAFallback {inline void prepare(KernelPatcher&,IOPCIDevice*,const XELP::Profile&,bool){}}
 namespace XeDataAccess {
  void init(){}
  KernelPatcher::KextInfo sandbox{"com.apple.security.sandbox",8};unsigned installs=0;
